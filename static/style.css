@@ -1,0 +1,318 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+/* Basic Reset & Global */
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Orbitron', sans-serif;
+  color: #0ff;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  /* Futuristic gradient background */
+  background: linear-gradient(135deg, #000033 0%, #020f44 40%, #01082e 100%);
+  background-size: 200% 200%;
+  animation: gradientShift 15s ease infinite;
+}
+
+/* Subtle gradient animation for the body background */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Global Fixed Overlays */
+#brand-overlay {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
+  pointer-events: none;
+  /* Add a subtle glitch effect */
+  animation: glitch 2s infinite;
+}
+
+/* Glitch effect keyframes */
+@keyframes glitch {
+  0% {
+    text-shadow: 0 0 5px #0ff, 0 0 10px #0ff, 0 0 20px #0ff;
+  }
+  20% {
+    text-shadow: -2px 0 #f0f, 2px 0 #0ff;
+  }
+  40% {
+    text-shadow: 2px 0 #f0f, -2px 0 #0ff;
+  }
+  60% {
+    text-shadow: -1px 0 #f0f, 1px 0 #0ff;
+  }
+  80% {
+    text-shadow: 1px 0 #f0f, -1px 0 #0ff;
+  }
+  100% {
+    text-shadow: 0 0 5px #0ff, 0 0 10px #0ff, 0 0 20px #0ff;
+  }
+}
+
+#sidebar {
+  position: fixed;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.circle {
+  width: 60px;
+  height: 60px;
+  background: rgba(0,255,255,0.3);
+  border: 2px solid #0ff;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
+  transition: transform 0.3s, background 0.3s, box-shadow 0.3s;
+}
+.circle:hover {
+  transform: scale(1.1);
+  background: rgba(0,255,255,0.6);
+  box-shadow: 0 0 15px #0ff, 0 0 30px #0ff;
+}
+
+/* Escape button styling */
+#escape-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 110;
+  background: rgba(0,255,255,0.7);
+  color: #000;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  display: none;
+  transition: opacity 0.5s, box-shadow 0.3s;
+}
+#escape-btn:hover {
+  background: rgba(0,255,255,0.9);
+  box-shadow: 0 0 10px #0ff;
+}
+
+/* Sections */
+section {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+  background: transparent;
+}
+
+/* Section 1 - Star Map with Star Ball & Visualizer */
+#section-1 canvas#star-map {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+#center-circles {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  width: 300px;
+  height: 300px;
+  cursor: pointer;
+  transition: opacity 1s ease;
+}
+.center-circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,255,255,0.8) 0%, rgba(0,0,30,0) 70%);
+  filter: blur(1px);
+  mix-blend-mode: screen;
+  animation: spin 10s linear infinite;
+}
+.circle1 {
+  width: 300px;
+  height: 300px;
+  animation-duration: 14s;
+}
+.circle2 {
+  width: 220px;
+  height: 220px;
+  animation-duration: 10s;
+}
+.circle3 {
+  width: 140px;
+  height: 140px;
+  animation-duration: 6s;
+}
+@keyframes spin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+#visualizer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  display: none;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+/* Section 2 - Search Bar & Results */
+#section-2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 150px;
+  position: relative;
+}
+
+/* Wrap search and results for better layout control */
+.search-wrapper {
+  width: 90%;
+  max-width: 1000px;
+  margin: 0 auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#search-bar {
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 20px;
+  z-index: 6;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#search-bar input {
+  flex: 1;
+  padding: 15px 20px;
+  font-size: 1.2rem;
+  font-family: 'Orbitron', sans-serif;
+  color: #0ff;
+  background: rgba(0, 0, 30, 0.8);
+  border: 2px solid #0ff;
+  border-radius: 50px;
+  outline: none;
+  box-shadow: 0 0 10px #0ff;
+  transition: background 0.3s, box-shadow 0.3s;
+}
+#search-bar input::placeholder {
+  color: rgba(0,255,255,0.5);
+}
+#search-bar input:focus {
+  background: rgba(0, 0, 30, 1);
+  box-shadow: 0 0 20px #0ff;
+}
+#search-bar button {
+  margin-left: 10px;
+  padding: 15px 25px;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 50px;
+  background: #0ff;
+  color: #000;
+  cursor: pointer;
+  transition: background 0.3s, box-shadow 0.3s;
+}
+#search-bar button:hover {
+  background: #0cc;
+  box-shadow: 0 0 15px #0ff;
+}
+
+/* Results Container */
+#results-container {
+  width: 100%;
+  max-width: 800px;
+  background: rgba(0, 0, 30, 0.8);
+  padding: 20px;
+  border: 1px solid #0ff;
+  border-radius: 10px;
+  color: #0ff;
+  /* A fade-in animation */
+  opacity: 0;
+  animation: fadeIn 0.8s forwards;
+}
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+#results-container h2, 
+#results-container h3 {
+  margin-top: 0;
+}
+
+/* Style each result as a "card" */
+#results-container ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+#results-container ul li {
+  background: rgba(0, 0, 60, 0.4);
+  margin: 8px 0;
+  padding: 12px;
+  border-radius: 5px;
+  transition: background 0.3s, transform 0.3s;
+}
+#results-container ul li:hover {
+  background: rgba(0, 0, 60, 0.6);
+  transform: translateX(5px);
+}
+#results-container ul li a {
+  color: #0ff;
+  text-decoration: none;
+  font-weight: 600;
+}
+#results-container ul li a:hover {
+  text-decoration: underline;
+}
+
+/* Footer styling */
+#footer {
+  text-align: center;
+  margin: 30px auto;
+  padding: 20px;
+  color: #0ff;
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+#footer span {
+  color: #0ff;
+  font-weight: 600;
+}
+
+/* Responsive: Make sure everything scales nicely on small screens */
+@media (max-width: 600px) {
+  #search-bar button {
+    margin-left: 5px;
+    padding: 12px 16px;
+    font-size: 1rem;
+  }
+  #search-bar input {
+    font-size: 1rem;
+  }
+  #results-container {
+    padding: 15px;
+  }
+}

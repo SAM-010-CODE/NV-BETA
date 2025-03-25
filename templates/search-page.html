@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>THE NANOVERSE - BETA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Futuristic, artistic styling -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Global Fixed Elements -->
+  <div id="brand-overlay">THE NANOVERSE</div>
+  <div id="sidebar">
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+  </div>
+  <button id="escape-btn">Escape</button>
+
+  <!-- Section 1: Star Map with Star Ball & Visualizer -->
+  <section id="section-1">
+    <canvas id="star-map"></canvas>
+    <div id="center-circles">
+      <div class="center-circle circle1"></div>
+      <div class="center-circle circle2"></div>
+      <div class="center-circle circle3"></div>
+    </div>
+    <canvas id="visualizer"></canvas>
+  </section>
+
+  <!-- Section 2: Search Bar & Results -->
+  <section id="section-2">
+    <div class="search-wrapper">
+      <div id="search-bar">
+        <input type="text" id="search-input" placeholder="Search the Nanoverse...">
+        <button id="search-btn">Search</button>
+      </div>
+      <div id="results-container"></div>
+    </div>
+  </section>
+
+  <!-- Optionally, a simple brand or disclaimers area at the bottom -->
+  <footer id="footer">
+    <p>Powered by <span>Light AI</span>.</p>
+  </footer>
+
+  <!-- Three.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <!-- Matter.js Library (if needed) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+
+  <script src="script.js"></script>
+</body>
+</html>
