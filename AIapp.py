@@ -110,4 +110,4 @@ async def search(query_data: SearchQuery):
         raise HTTPException(status_code=400, detail="Modality not supported yet.")
 
 if __name__ == "__main__":
-    uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("app:app", host="0.0.0.0", port=10000, reload=True)
