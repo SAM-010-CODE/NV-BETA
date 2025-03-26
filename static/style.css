@@ -401,3 +401,71 @@ section {
   align-items: center;
 }
 
+
+
+/* Chat widget styling */
+#chat-widget {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 300px;
+  background: rgba(0, 0, 30, 0.9);
+  border: 2px solid #0ff;
+  border-radius: 10px;
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Orbitron', sans-serif;
+  color: #0ff;
+  transition: transform 0.3s ease;
+}
+
+/* Header styling for toggle */
+#chat-header {
+  background: #020f44;
+  padding: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  text-align: center;
+  border-bottom: 2px solid #0ff;
+}
+
+/* Chat messages container */
+#chat-messages {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  max-height: 200px;
+}
+
+/* Input area styling */
+#chat-input-area {
+  display: flex;
+  padding: 10px;
+  border-top: 2px solid #0ff;
+}
+#chat-input {
+  flex: 1;
+  padding: 5px;
+  background: rgba(0, 0, 30, 0.8);
+  border: 1px solid #0ff;
+  color: #0ff;
+  border-radius: 5px;
+  outline: none;
+}
+#chat-send-btn {
+  margin-left: 5px;
+  padding: 5px 10px;
+  background: #0ff;
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Minimization style: only header visible */
+.chat-widget-minimized {
+  transform: translateY(calc(100% - 40px));
+}
+
+

@@ -386,3 +386,62 @@
   // Initialize favorites UI on page load
   updateFavoritesUI();
 })();
+
+
+
+/* ========================================
+       Chat-Based Assistant Mode
+   ======================================== */
+(function initChatAssistant() {
+  const chatWidget = document.getElementById('chat-widget');
+  const chatHeader = document.getElementById('chat-header');
+  const chatMessages = document.getElementById('chat-messages');
+  const chatInput = document.getElementById('chat-input');
+  const chatSendBtn = document.getElementById('chat-send-btn');
+
+  // Toggle chat widget open/close on header click
+  chatHeader.addEventListener('click', () => {
+    chatWidget.classList.toggle('chat-widget-minimized');
+  });
+
+  // Function to send a chat message
+  function sendMessage() {
+    const messageText = chatInput.value.trim();
+    if (!messageText) return;
+    
+    // Append user's message to chat
+    const userMsgDiv = document.createElement('div');
+    userMsgDiv.innerHTML = `<strong>You:</strong> ${messageText}`;
+    chatMessages.appendChild(userMsgDiv);
+    chatInput.value = '';
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    // Send message to the backend chat endpoint
+    fetch('/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: messageText })
+    })
+    .then(response => response.json())
+    .then(data => {
+      const aiMsgDiv = document.createElement('div');
+      aiMsgDiv.innerHTML = `<strong>Assistant:</strong> ${data.response}`;
+      chatMessages.appendChild(aiMsgDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    })
+    .catch(err => {
+      console.error('Chat error:', err);
+      const errorDiv = document.createElement('div');
+      errorDiv.innerHTML = `<strong>Error:</strong> Unable to get response.`;
+      chatMessages.appendChild(errorDiv);
+    });
+  }
+
+  // Event listeners for sending messages
+  chatSendBtn.addEventListener('click', sendMessage);
+  chatInput.addEventListener('keypress', (event) => {
+    if (event.key === 'Enter') {
+      sendMessage();
+    }
+  });
+})();

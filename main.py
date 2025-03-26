@@ -140,6 +140,16 @@ async def search(query_data: SearchQuery):
         }
     else:
         raise HTTPException(status_code=400, detail="Modality not supported yet.")
+    
+# Define a Pydantic model for chat messages
+class ChatMessage(BaseModel):
+    message: str
+
+@app.post("/chat")
+async def chat(chat_message: ChatMessage):
+    ai_response = llm_chain.run(query=chat_message.message)
+    return {"response": ai_response}
+
 
 if __name__ == "__main__":
     # Run the combined app on port 10000 (Render uses port 10000)
