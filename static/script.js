@@ -118,7 +118,7 @@
     resultsContainer.innerHTML = "<p>Loading...</p>";
     
     try {
-      const response = await fetch("http://localhost:8000/search", {
+      const response = await fetch("http://localhost:10000/search", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
