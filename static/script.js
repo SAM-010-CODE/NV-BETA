@@ -248,5 +248,78 @@
 
 
 /* ========================================
-      _
+      Raycasting
    ======================================== */
+   (function initStarMap() {
+    const canvas = document.getElementById('star-map');
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x000033);
+    
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 5000);
+    camera.position.z = 1000;
+    
+    const starCount = 1000000;
+    const positions = new Float32Array(starCount * 3);
+    for (let i = 0; i < starCount * 3; i++) {
+      positions[i] = (Math.random() - 0.5) * 5000;
+    }
+    
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    const material = new THREE.PointsMaterial({
+      color: 0x0ff,
+      size: 1,
+      sizeAttenuation: true,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false
+    });
+    const stars = new THREE.Points(geometry, material);
+    scene.add(stars);
+    
+    function animate() {
+      requestAnimationFrame(animate);
+      stars.rotation.y += 0.0005;
+      renderer.render(scene, camera);
+    }
+    animate();
+    
+    // Add raycasting for interactive star clicks
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+    
+    canvas.addEventListener('click', (event) => {
+      // Convert click coordinates to normalized device coordinates
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObject(stars);
+      if (intersects.length > 0) {
+        const intersect = intersects[0];
+        const point = intersect.point;
+        // Generate a fun fact about the star
+        const starInfo = `Star Coordinates:<br>X: ${point.x.toFixed(2)}<br>Y: ${point.y.toFixed(2)}<br>Z: ${point.z.toFixed(2)}<br><br>Fun Fact: Stars can be billions of years old!`;
+        // Display the modal with the star information
+        const modal = document.getElementById('star-info-modal');
+        const starInfoDiv = document.getElementById('star-info');
+        starInfoDiv.innerHTML = starInfo;
+        modal.style.display = 'block';
+      }
+    });
+    
+    // Close modal when the close button is clicked
+    document.getElementById('modal-close').addEventListener('click', () => {
+      document.getElementById('star-info-modal').style.display = 'none';
+    });
+    
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  })();
+  
