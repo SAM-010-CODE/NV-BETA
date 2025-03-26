@@ -114,7 +114,7 @@
     resultsContainer.innerHTML = "<p>Loading...</p>";
     
     try {
-      const response = await fetch("/search", {  // Changed URL to relative path
+      const response = await fetch("http://localhost:10000/search", {  // Changed URL to relative path
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -126,7 +126,7 @@
       
       // Render the AI answer, Sanity results, and Google Custom Search results.
       resultsContainer.innerHTML = `
-        <h2>AI Answer</h2>
+        <h2>Deep Summary</h2>
         <p>${data.ai_answer}</p>
         <h3>Sanity Results</h3>
         <ul>
