@@ -103,14 +103,10 @@
     });
   })();
   
-
-
-
-
-/* ==========================
-   Section 2 - Search Bar Functionality
-   ========================== */
-   document.getElementById('search-btn').addEventListener('click', async () => {
+  /* ==========================
+     Section 2 - Search Bar Functionality
+     ========================== */
+  document.getElementById('search-btn').addEventListener('click', async () => {
     const query = document.getElementById('search-input').value;
     if (!query) return;
     
@@ -118,7 +114,7 @@
     resultsContainer.innerHTML = "<p>Loading...</p>";
     
     try {
-      const response = await fetch("http://localhost:10000/search", {
+      const response = await fetch("/search", {  // Changed URL to relative path
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -146,8 +142,3 @@
     }
   });
   
-
-  /* ==================
-
-     ================== */
-     

@@ -1,5 +1,6 @@
-from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware  # <-- import this
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from typing import Optional
 import uvicorn
@@ -15,6 +16,9 @@ load_dotenv()
 
 app = FastAPI()
 
+# Mount the static files directory so that CSS/JS/images can be served
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
 # Enable CORS (adjust allow_origins as needed)
 app.add_middleware(
     CORSMiddleware,
@@ -29,8 +33,6 @@ class SearchQuery(BaseModel):
     modality: Optional[str] = "text"
 
 openai_llm = OpenAI(temperature=0.7, max_tokens=150)
-...
-
 
 # Simple prompt template for the AI search answer
 prompt_template = PromptTemplate(
@@ -110,4 +112,5 @@ async def search(query_data: SearchQuery):
         raise HTTPException(status_code=400, detail="Modality not supported yet.")
 
 if __name__ == "__main__":
-    uvicorn.run("app:app", host="0.0.0.0", port=10000, reload=True)
+    # Note: update the module name to "AIse" (matching my file name) 
+    uvicorn.run("AIse:app", host="0.0.0.0", port=10000, reload=True)
