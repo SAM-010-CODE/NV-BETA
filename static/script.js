@@ -145,3 +145,54 @@
     }
   });
   
+
+/* ==========================
+     Section 4 - Voice input.
+     ========================== */
+
+  (function initVoiceSearch() {
+    const voiceBtn = document.getElementById('voice-btn');
+    const searchInput = document.getElementById('search-input');
+    
+    // Check for browser support for Speech Recognition
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+      console.log("Voice recognition not supported in this browser.");
+      voiceBtn.style.display = 'none';
+      return;
+    }
+    
+    // Initialize SpeechRecognition
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+    
+    // When the voice button is clicked, start recognition
+    voiceBtn.addEventListener('click', () => {
+      recognition.start();
+      voiceBtn.innerText = 'Listening...';
+    });
+    
+    // Process the recognized speech
+    recognition.addEventListener('result', (event) => {
+      const transcript = event.results[0][0].transcript;
+      searchInput.value = transcript;
+      voiceBtn.innerText = '🎤';
+      // Optionally, automatically trigger the search
+      document.getElementById('search-btn').click();
+    });
+    
+    // Reset button when speech ends
+    recognition.addEventListener('speechend', () => {
+      recognition.stop();
+      voiceBtn.innerText = '🎤';
+    });
+    
+    // Handle any errors
+    recognition.addEventListener('error', (event) => {
+      console.error('Speech recognition error:', event.error);
+      voiceBtn.innerText = '🎤';
+    });
+  })();
+  
