@@ -114,7 +114,7 @@
     resultsContainer.innerHTML = "<p>Loading...</p>";
     
     try {
-      const response = await fetch("http://localhost:10000/search", {  // Changed URL to relative path
+      const response = await fetch("/search", {  // Changed URL to relative path
         method: "POST",
         headers: {
           "Content-Type": "application/json"
