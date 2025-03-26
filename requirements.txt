@@ -6,3 +6,4 @@ pydantic
 langchain
 openai
 jinja2     
+langchain_community
