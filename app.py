@@ -12,3 +12,7 @@ templates = Jinja2Templates(directory="templates")
 @app.get("/", response_class=HTMLResponse)
 def read_root(request: Request):
     return templates.TemplateResponse("theNVpreview.html", {"request": request})
+
+@app.get("/search-page", response_class=HTMLResponse)
+def search_page(request: Request):
+    return templates.TemplateResponse("search-page.html", {"request": request})
