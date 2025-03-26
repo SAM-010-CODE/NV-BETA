@@ -137,7 +137,12 @@
         </ul>
         <h3>Google Results</h3>
         <ul>
-          ${data.google_results.map(item => `<li><a href="${item.link}" target="_blank">${item.title}</a>: ${item.snippet}</li>`).join("") || "<li>No results found.</li>"}
+          ${data.google_results.map(item => `
+            <li>
+              <a href="${item.link}" target="_blank">${item.title}</a>: ${item.snippet} 
+              <button class="favorite-btn" data-title="${item.title}" data-link="${item.link}" data-snippet="${item.snippet}">★</button>
+            </li>
+          `).join("") || "<li>No results found.</li>"}
         </ul>
       `;
     } catch (error) {
@@ -323,3 +328,61 @@
     });
   })();
   
+
+
+/* ===================================================
+     Favorites/Bookmarking feature using localStorage
+   =================================================== */
+
+(function initFavorites() {
+  // Helper functions to load and save favorites
+  function loadFavorites() {
+    return JSON.parse(localStorage.getItem("favorites") || "[]");
+  }
+  
+  function saveFavorites(favorites) {
+    localStorage.setItem("favorites", JSON.stringify(favorites));
+  }
+  
+  function updateFavoritesUI() {
+    const favorites = loadFavorites();
+    const favoritesList = document.getElementById("favorites-list");
+    favoritesList.innerHTML = favorites.map(fav => `
+      <li>
+        <a href="${fav.link}" target="_blank">${fav.title}</a>
+        <button class="remove-fav-btn" data-link="${fav.link}">Remove</button>
+      </li>
+    `).join("");
+    
+    // Attach event listeners for remove buttons
+    document.querySelectorAll(".remove-fav-btn").forEach(btn => {
+      btn.addEventListener("click", (event) => {
+        const link = event.target.getAttribute("data-link");
+        let favs = loadFavorites();
+        favs = favs.filter(fav => fav.link !== link);
+        saveFavorites(favs);
+        updateFavoritesUI();
+      });
+    });
+  }
+  
+  // Set up event listener for favorite buttons in search results
+  document.addEventListener("click", function(event) {
+    if (event.target.classList.contains("favorite-btn")) {
+      const title = event.target.getAttribute("data-title");
+      const link = event.target.getAttribute("data-link");
+      const snippet = event.target.getAttribute("data-snippet");
+      let favorites = loadFavorites();
+      // Only add if not already present
+      if (!favorites.some(fav => fav.link === link)) {
+        favorites.push({ title, link, snippet });
+        saveFavorites(favorites);
+        updateFavoritesUI();
+      }
+      event.target.disabled = true; // Optionally disable the button after adding
+    }
+  });
+  
+  // Initialize favorites UI on page load
+  updateFavoritesUI();
+})();
