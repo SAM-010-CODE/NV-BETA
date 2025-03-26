@@ -1,6 +1,8 @@
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 from typing import Optional
 import uvicorn
@@ -16,13 +18,16 @@ load_dotenv()
 
 app = FastAPI()
 
-# Mount the static files directory so that CSS/JS/images can be served
+# Mount the static files directory so that CSS/JS/images are served
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# Enable CORS (adjust allow_origins as needed)
+# Set up templates from the "templates" folder
+templates = Jinja2Templates(directory="templates")
+
+# Enable CORS (adjust allowed origins as needed)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Or list your allowed domains e.g. ["http://127.0.0.1:5501"]
+    allow_origins=["*"],  # Or list your allowed domains, e.g. ["https://yourdomain.com"]
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -34,7 +39,7 @@ class SearchQuery(BaseModel):
 
 openai_llm = OpenAI(temperature=0.7, max_tokens=150)
 
-# Simple prompt template for the AI search answer
+# Prompt template for AI answer
 prompt_template = PromptTemplate(
     input_variables=["query"],
     template="You are a search assistant. Answer the following query in a concise and helpful manner:\n\n{query}"
@@ -96,13 +101,9 @@ async def search(query_data: SearchQuery):
     modality = query_data.modality
 
     if modality == "text":
-        # Generate AI answer using Langchain
         ai_answer = llm_chain.run(query=query)
-        # Get results from Sanity
         sanity_results = query_sanity(query)
-        # Get additional web search results using Google Custom Search API
         google_results = query_google(query)
-
         return {
             "ai_answer": ai_answer,
             "sanity_results": sanity_results,
@@ -111,6 +112,11 @@ async def search(query_data: SearchQuery):
     else:
         raise HTTPException(status_code=400, detail="Modality not supported yet.")
 
+# New GET endpoint to serve the search page
+@app.get("/search-page", response_class=HTMLResponse)
+async def get_search_page(request: Request):
+    return templates.TemplateResponse("search-page.html", {"request": request})
+
 if __name__ == "__main__":
-    # Note: update the module name to "AIse" (matching my file name) 
+    # Make sure to use "AIse:app" to match the filename and app variable
     uvicorn.run("AIse:app", host="0.0.0.0", port=10000, reload=True)

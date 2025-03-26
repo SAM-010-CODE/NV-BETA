@@ -6,19 +6,19 @@
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
-    
+  
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x000033);
-    
+  
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 5000);
     camera.position.z = 1000;
-    
+  
     const starCount = 1000000;
     const positions = new Float32Array(starCount * 3);
     for (let i = 0; i < starCount * 3; i++) {
       positions[i] = (Math.random() - 0.5) * 5000;
     }
-    
+  
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     const material = new THREE.PointsMaterial({
@@ -30,14 +30,14 @@
     });
     const stars = new THREE.Points(geometry, material);
     scene.add(stars);
-    
+  
     function animate() {
       requestAnimationFrame(animate);
       stars.rotation.y += 0.0005;
       renderer.render(scene, camera);
     }
     animate();
-    
+  
     window.addEventListener('resize', () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
@@ -109,22 +109,25 @@
   document.getElementById('search-btn').addEventListener('click', async () => {
     const query = document.getElementById('search-input').value;
     if (!query) return;
-    
+  
     const resultsContainer = document.getElementById('results-container');
     resultsContainer.innerHTML = "<p>Loading...</p>";
-    
+  
     try {
-      const response = await fetch("/search", {  // Changed URL to relative path
+      const response = await fetch("/search", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({ query: query, modality: "text" })
       });
-      
+  
+      if (!response.ok) {
+        throw new Error(`Request failed with status ${response.status}`);
+      }
+  
       const data = await response.json();
-      
-      // Render the AI answer, Sanity results, and Google Custom Search results.
+  
       resultsContainer.innerHTML = `
         <h2>Deep Summary</h2>
         <p>${data.ai_answer}</p>
