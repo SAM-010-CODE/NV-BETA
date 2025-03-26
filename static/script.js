@@ -195,4 +195,58 @@
       voiceBtn.innerText = '🎤';
     });
   })();
+
+
+/* ========================================
+      Autocomplete and Suggestions feature
+   ======================================== */
+
   
+(function initAutocomplete() {
+  const searchInput = document.getElementById('search-input');
+  const suggestionsContainer = document.getElementById('suggestions-container');
+
+  searchInput.addEventListener('input', async () => {
+    const query = searchInput.value.trim();
+    if (query.length === 0) {
+      suggestionsContainer.style.display = 'none';
+      suggestionsContainer.innerHTML = '';
+      return;
+    }
+    
+    try {
+      const response = await fetch(`/autocomplete?q=${encodeURIComponent(query)}`);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch suggestions. Status: ${response.status}`);
+      }
+      const data = await response.json();
+      const suggestions = data.suggestions;
+      if (suggestions.length > 0) {
+        suggestionsContainer.innerHTML = suggestions
+          .map(s => `<div class="suggestion-item">${s}</div>`)
+          .join('');
+        suggestionsContainer.style.display = 'block';
+        // Add click event listeners to each suggestion item
+        document.querySelectorAll('#suggestions-container .suggestion-item').forEach(item => {
+          item.addEventListener('click', () => {
+            searchInput.value = item.innerText;
+            suggestionsContainer.style.display = 'none';
+            document.getElementById('search-btn').click();
+          });
+        });
+      } else {
+        suggestionsContainer.style.display = 'none';
+      }
+    } catch (error) {
+      console.error('Error fetching suggestions:', error);
+      suggestionsContainer.style.display = 'none';
+    }
+  });
+})();
+
+  
+
+
+/* ========================================
+      _
+   ======================================== */

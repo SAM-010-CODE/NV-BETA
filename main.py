@@ -104,6 +104,25 @@ def read_root(request: Request):
 def get_search_page(request: Request):
     return templates.TemplateResponse("search-page.html", {"request": request})
 
+@app.get("/autocomplete")
+def autocomplete(q: str):
+    # A static list of suggestion examples; you can later enhance this with dynamic data.
+    suggestions_list = [
+        "Nanoverse news",
+        "Space exploration",
+        "Deep space search",
+        "AI research",
+        "Virtual reality experiences",
+        "Astro discoveries",
+        "Quantum computing",
+        "Futuristic tech",
+        "Cyber security",
+        "AI and space"
+    ]
+    suggestions = [s for s in suggestions_list if s.lower().startswith(q.lower())]
+    return {"suggestions": suggestions}
+
+
 # Search endpoint (POST) that handles search queries
 @app.post("/search")
 async def search(query_data: SearchQuery):

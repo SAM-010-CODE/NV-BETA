@@ -316,3 +316,25 @@ section {
     padding: 15px;
   }
 }
+
+
+/* Suggestions styling */
+#suggestions-container {
+  position: absolute;
+  top: 100%;
+  width: 100%;
+  background: rgba(0, 0, 30, 0.9);
+  border: 2px solid #0ff;
+  border-radius: 5px;
+  z-index: 7;
+  display: none;
+}
+#suggestions-container div {
+  padding: 10px;
+  cursor: pointer;
+  color: #0ff;
+}
+#suggestions-container div:hover {
+  background: rgba(0,255,255,0.2);
+}
+
